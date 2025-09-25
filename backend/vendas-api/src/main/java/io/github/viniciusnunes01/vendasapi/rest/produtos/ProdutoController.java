@@ -1,6 +1,7 @@
 package io.github.viniciusnunes01.vendasapi.rest.produtos;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +12,7 @@ import io.github.viniciusnunes01.vendasapi.model.repository.ProdutoRepository;
 
 @RestController
 @RequestMapping("/api/produtos")
+@CrossOrigin("*")
 public class ProdutoController {
 
 	@Autowired
@@ -19,17 +21,11 @@ public class ProdutoController {
 	@PostMapping
 	public ProdutoFormRequest salvar(@RequestBody ProdutoFormRequest produto) {
 
-		Produto entidadeProduto = new Produto(
-				produto.getNome(), 
-				produto.getDescricao(), 
-				produto.getPreco(),
-				produto.getSku()
-				);
+		Produto entidadeProduto = produto.toModel();
 
 		repository.save(entidadeProduto);
-		
-		System.out.println(entidadeProduto);
-		return produto;
+
+		return ProdutoFormRequest.fromModel(entidadeProduto);
 	}
 
 }
