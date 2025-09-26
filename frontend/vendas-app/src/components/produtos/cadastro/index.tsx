@@ -1,6 +1,8 @@
 import { Produto } from "@/app/models/produtos"
 import { useProdutoService } from "@/app/services"
-import { Input } from "@/components/common"
+import { converterEmBigDecimal } from "@/app/util/money/intex"
+import { Input, Message } from "@/components/common"
+import { Alert } from "@/components/common/message"
 import { Layout } from "@/components/layout"
 import { useState } from "react"
 
@@ -12,22 +14,65 @@ export const CadastroProdutos: React.FC = () => {
     const [preco, setPreco] = useState<string>('')
     const [nome, setNome] = useState<string>('')
     const [descricao, setDescricao] = useState<string>('')
+    const [id, setId] = useState<string>('')
+    const [cadastro, setCadastro] = useState<string>('')
+    const [messages, setMessages] = useState<Array<Alert>>([])
 
     const submit = () => {
         const produto: Produto = {
+            id,
             sku,
-            preco: parseFloat(preco),
+            preco: converterEmBigDecimal(preco),
             nome,
-            descricao
+            descricao,
+            cadastro
         }
+
+        if (id) {
+            service
+                .atualizar(produto)
+                .then(response => {
+                    setMessages([{
+                        tipo: "success", texto: "Produto atualizado com sucesso!"
+                    }])
+                })
+
+        } else {
+
+        }
+
         service
             .salvar(produto)
-            .then(produtoResposta => console.log(produtoResposta))
+            .then(produtoResposta => {
+                setId(produtoResposta.id)
+                setCadastro(produtoResposta.cadastro)
+                setMessages([{
+                    tipo: "success", texto: "Produto salvo com sucesso!"
+                }])
+            })
     }
 
 
     return (
-        <Layout titulo="Produtos">
+        <Layout titulo="Produtos" mensagens={messages}>
+            {id &&
+                <div className="columns">
+                    <Input
+                        id="inputId"
+                        label="Código: *"
+                        columnClasses="is-half"
+                        value={id}
+                        disabled={true}
+                    />
+                    <Input
+                        id="inputDataCadastro"
+                        label="Data de Cadastro: *"
+                        columnClasses="is-half"
+                        value={cadastro}
+                        disabled={true}
+                    />
+                </div>
+            }
 
             <div className="columns">
                 <Input
@@ -45,6 +90,7 @@ export const CadastroProdutos: React.FC = () => {
                     columnClasses="is-half"
                     value={preco}
                     onChange={setPreco}
+                    currency
                 />
             </div>
             <div className="columns">
@@ -74,7 +120,9 @@ export const CadastroProdutos: React.FC = () => {
 
             <div className="field is-grouped">
                 <div className="control">
-                    <button onClick={submit} className="button is-link">Salvar</button>
+                    <button onClick={submit} className="button is-link">
+                        {id ? "Atualizar" : "Salvar"}
+                    </button>
                 </div>
                 <div className="control">
                     <button className="button is-link is-light">Voltar</button>

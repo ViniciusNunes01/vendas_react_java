@@ -1,3 +1,4 @@
+import { formatReal } from "@/app/util/money/intex";
 import { HtmlHTMLAttributes, InputHTMLAttributes } from "react";
 
 interface inputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -5,6 +6,7 @@ interface inputProps extends InputHTMLAttributes<HTMLInputElement> {
     onChange?: (value: any) => void;
     label: string;
     columnClasses?: string;
+    currency?: boolean;
 }
 
 export const Input: React.FC<inputProps> = ({
@@ -12,8 +14,23 @@ export const Input: React.FC<inputProps> = ({
     label,
     columnClasses,
     id,
+    currency,
     ...inputProps
 }: inputProps) => {
+
+    const onInputChange = (e: any) => {
+
+        let value = e.target.value;
+
+        if (value && currency) {
+            value = formatReal(value);
+        }
+
+        if (onChange) {
+            onChange(value)
+        }
+    }
+
     return (
         <div className={`field column ${columnClasses}`}>
             <label className="label" htmlFor={id}>{label}</label>
@@ -22,11 +39,7 @@ export const Input: React.FC<inputProps> = ({
                     id={id}
                     className="input"
                     {...inputProps}
-                    onChange={e => {
-                        if (onChange) {
-                            onChange(e.target.value)
-                        }
-                    }}
+                    onChange={onInputChange}
                 />
             </div>
         </div>
