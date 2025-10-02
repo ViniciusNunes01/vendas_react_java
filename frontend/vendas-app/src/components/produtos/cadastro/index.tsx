@@ -4,8 +4,25 @@ import { converterEmBigDecimal } from "@/app/util/money/intex"
 import { Input, Message } from "@/components/common"
 import { Alert } from "@/components/common/message"
 import { Layout } from "@/components/layout"
+import Link from "next/link"
 import { useState } from "react"
+import * as yup from 'yup'
 
+const msgCampoObrigatorio = "Campo obrigatório";
+
+const validationSchema = yup.object().shape({
+    sku: yup.string().trim().required(msgCampoObrigatorio),
+    nome: yup.string().trim().required(msgCampoObrigatorio),
+    descricao: yup.string().trim().required(msgCampoObrigatorio),
+    preco: yup.number().required(msgCampoObrigatorio).moreThan(0, "Valor deve ser maior que 0,00 (Zero)")
+})
+
+interface FormErrors {
+    sku?: string;
+    nome?: string;
+    preco?: string;
+    descricao?: string;
+}
 
 export const CadastroProdutos: React.FC = () => {
 
@@ -17,6 +34,7 @@ export const CadastroProdutos: React.FC = () => {
     const [id, setId] = useState<string>('')
     const [cadastro, setCadastro] = useState<string>('')
     const [messages, setMessages] = useState<Array<Alert>>([])
+    const [errors, setErrors] = useState<FormErrors>({})
 
     const submit = () => {
         const produto: Produto = {
@@ -28,28 +46,39 @@ export const CadastroProdutos: React.FC = () => {
             cadastro
         }
 
-        if (id) {
-            service
-                .atualizar(produto)
-                .then(response => {
-                    setMessages([{
-                        tipo: "success", texto: "Produto atualizado com sucesso!"
-                    }])
-                })
+        validationSchema.validate(produto).then(obj => {
 
-        } else {
+            setErrors({})
 
-        }
+            if (id) {
+                service
+                    .atualizar(produto)
+                    .then(response => {
+                        setMessages([{
+                            tipo: "success", texto: "Produto atualizado com sucesso!"
+                        }])
+                    })
 
-        service
-            .salvar(produto)
-            .then(produtoResposta => {
-                setId(produtoResposta.id)
-                setCadastro(produtoResposta.cadastro)
-                setMessages([{
-                    tipo: "success", texto: "Produto salvo com sucesso!"
-                }])
+            } else {
+
+                service
+                    .salvar(produto)
+                    .then(produtoResposta => {
+                        setId(produtoResposta.id)
+                        setCadastro(produtoResposta.cadastro)
+                        setMessages([{
+                            tipo: "success", texto: "Produto salvo com sucesso!"
+                        }])
+                    })
+            }
+        }).catch(err => {
+            const field = err.path;
+            const message = err.message
+
+            setErrors({
+                [field]: message
             })
+        })
     }
 
 
@@ -82,6 +111,7 @@ export const CadastroProdutos: React.FC = () => {
                     columnClasses="is-half"
                     value={sku}
                     onChange={setSku}
+                    error={errors.sku}
                 />
                 <Input
                     id="inputPreco"
@@ -91,6 +121,7 @@ export const CadastroProdutos: React.FC = () => {
                     value={preco}
                     onChange={setPreco}
                     currency
+                    error={errors.preco}
                 />
             </div>
             <div className="columns">
@@ -101,6 +132,7 @@ export const CadastroProdutos: React.FC = () => {
                     columnClasses="is-full"
                     value={nome}
                     onChange={setNome}
+                    error={errors.nome}
                 />
             </div>
 
@@ -113,7 +145,12 @@ export const CadastroProdutos: React.FC = () => {
                             className="textarea"
                             value={descricao}
                             onChange={e => setDescricao(e.target.value)}
-                            placeholder="Digite a descrição do produto" />
+                            placeholder="Digite a descrição do produto"
+                        />
+                        {
+                            errors.descricao &&
+                            <p className="help is-danger">{errors.descricao}</p>
+                        }
                     </div>
                 </div>
             </div>
@@ -125,7 +162,9 @@ export const CadastroProdutos: React.FC = () => {
                     </button>
                 </div>
                 <div className="control">
-                    <button className="button is-link is-light">Voltar</button>
+                    <Link href="/consultas/produtos">
+                        <button className="button is-link is-light">Voltar</button>
+                    </Link>
                 </div>
             </div>
         </Layout>
