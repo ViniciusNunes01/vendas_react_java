@@ -53,6 +53,12 @@ public class ProdutoController {
 
 	@GetMapping
 	public List<ProdutoFormRequest> getLista() {
+		
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 
 		return repository.findAll().stream().map(ProdutoFormRequest::fromModel).collect(Collectors.toList());
 	}
