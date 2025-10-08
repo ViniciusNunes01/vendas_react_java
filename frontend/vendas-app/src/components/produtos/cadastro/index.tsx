@@ -1,11 +1,12 @@
 import { Produto } from "@/app/models/produtos"
 import { useProdutoService } from "@/app/services"
-import { converterEmBigDecimal } from "@/app/util/money/intex"
-import { Input, Message } from "@/components/common"
+import { converterEmBigDecimal, formatReal } from "@/app/util/money/intex"
+import { Input } from "@/components/common"
 import { Alert } from "@/components/common/message"
 import { Layout } from "@/components/layout"
 import Link from "next/link"
-import { useState } from "react"
+import { useRouter } from "next/router"
+import { useEffect, useState } from "react"
 import * as yup from 'yup'
 
 const msgCampoObrigatorio = "Campo obrigatório";
@@ -35,6 +36,22 @@ export const CadastroProdutos: React.FC = () => {
     const [cadastro, setCadastro] = useState<string>('')
     const [messages, setMessages] = useState<Array<Alert>>([])
     const [errors, setErrors] = useState<FormErrors>({})
+    const router = useRouter();
+    const { id: queryId } = router.query
+
+    useEffect(() => {
+
+        if (queryId) {
+            service.carregarProduto(queryId).then(produtoEncontrado => {
+                setId(produtoEncontrado.id)
+                setSku(produtoEncontrado.sku || '')
+                setNome(produtoEncontrado.nome || '')
+                setDescricao(produtoEncontrado.descricao || '')
+                setPreco(formatReal(`${produtoEncontrado.preco || 0}`))
+                setCadastro(produtoEncontrado.cadastro || '')
+            })
+        }
+    }, [queryId])
 
     const submit = () => {
         const produto: Produto = {

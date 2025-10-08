@@ -5,7 +5,7 @@ export const converterEmBigDecimal = (value: any): number => {
     return value.replace(".","").replace(",", ".")
 }
 
-export const formatReal = (valor: string): string => {
+export const formatReal = (valor: any): string => {
   // Remove tudo que não é dígito
   const onlyDigits = valor.replace(/\D/g, '');
 

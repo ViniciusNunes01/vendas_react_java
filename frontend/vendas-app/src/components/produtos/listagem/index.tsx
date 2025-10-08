@@ -1,35 +1,54 @@
 import { httpClient } from "@/app/http"
 import { Produto } from "@/app/models/produtos"
+import { useProdutoService } from "@/app/services"
 import { Loader } from "@/components/common"
+import { Alert } from "@/components/common/message"
 import { Layout } from "@/components/layout"
 import { AxiosResponse } from "axios"
 import Link from "next/link"
+import Router from "next/router"
+import { useEffect, useState } from "react"
 import useSWR from "swr"
 import { TabelaProdutos } from "./tabela"
 
 export const ListagemProdutos: React.FC = () => {
 
+    const service = useProdutoService()
+    const [messages, setMessages] = useState<Array<Alert>>([])
+
     const { data: result, error } = useSWR<AxiosResponse<Produto[]>>
         ('/api/produtos', (url: any) => httpClient.get(url))
 
+    const [lista, setLista] = useState<Produto[]>([])
+
+    useEffect(() => {
+        setLista(result?.data || [])
+    }, [result])
 
     const editar = (produto: Produto) => {
-        console.log(produto, "EDITAR")
+        const url = `/cadastros/produtos?id=${produto.id}`
+        Router.push(url)
     }
 
     const deletar = (produto: Produto) => {
-        console.log(produto, "DELETAR")
+        service.deletarProduto(produto.id).then(response => {
+            setMessages([
+                { tipo: "success", texto: "Produto Excluido com Sucesso!" }
+            ])
+            const listaAlterada: Produto[] = lista?.filter(p => p.id !== produto.id)
+            setLista(listaAlterada)
+        })
     }
 
     return (
-        <Layout titulo="Produtos">
+        <Layout titulo="Produtos" mensagens={messages}>
             <Link href="/cadastros/produtos">
                 <button className="button is-warning">Novo</button>
                 <br></br>
             </Link>
             <br />
             <Loader show={!result} />
-            <TabelaProdutos onEdit={editar} onDelete={deletar} produtos={result?.data || []} />
+            <TabelaProdutos onEdit={editar} onDelete={deletar} produtos={lista} />
         </Layout>
     )
-}
+} 
