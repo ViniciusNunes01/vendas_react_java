@@ -1,7 +1,7 @@
 import { Produto } from "@/app/models/produtos"
 import { useProdutoService } from "@/app/services"
 import { converterEmBigDecimal, formatReal } from "@/app/util/money/intex"
-import { Input } from "@/components/common"
+import { Input, InputMoney } from "@/components/common"
 import { Alert } from "@/components/common/message"
 import { Layout } from "@/components/layout"
 import Link from "next/link"
@@ -49,6 +49,8 @@ export const CadastroProdutos: React.FC = () => {
                 setDescricao(produtoEncontrado.descricao || '')
                 setPreco(formatReal(`${produtoEncontrado.preco || 0}`))
                 setCadastro(produtoEncontrado.cadastro || '')
+
+                console.log("nome: ", produtoEncontrado.nome)
             })
         }
     }, [queryId])
@@ -99,6 +101,7 @@ export const CadastroProdutos: React.FC = () => {
     }
 
 
+
     return (
         <Layout titulo="Produtos" mensagens={messages}>
             {id &&
@@ -127,17 +130,16 @@ export const CadastroProdutos: React.FC = () => {
                     placeholder="Digite o SKU do produto"
                     columnClasses="is-half"
                     value={sku}
-                    onChange={setSku}
+                    onChange={e => setSku(e.target.value)}
                     error={errors.sku}
                 />
-                <Input
+                <InputMoney
                     id="inputPreco"
                     label="Preço: *"
                     placeholder="Digite o PREÇO do produto"
                     columnClasses="is-half"
                     value={preco}
-                    onChange={setPreco}
-                    currency
+                    onChange={e => setPreco(e.target.value)}
                     error={errors.preco}
                 />
             </div>
@@ -148,7 +150,7 @@ export const CadastroProdutos: React.FC = () => {
                     placeholder="Digite o NOME do produto"
                     columnClasses="is-full"
                     value={nome}
-                    onChange={setNome}
+                    onChange={e => setNome(e.target.value)}
                     error={errors.nome}
                 />
             </div>
