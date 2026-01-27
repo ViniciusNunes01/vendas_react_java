@@ -1,5 +1,8 @@
-import { Produto } from "@/app/models/produtos"
-import { useState } from "react";
+import { Produto } from "@/app/models/produtos";
+import { Button } from "primereact/button";
+import { Column } from 'primereact/column';
+import { confirmDialog } from "primereact/confirmdialog";
+import { DataTable } from 'primereact/datatable';
 
 interface TabelaProdutosProps {
     produtos: Array<Produto>
@@ -12,86 +15,47 @@ export const TabelaProdutos: React.FC<TabelaProdutosProps> = ({
     onDelete,
     onEdit
 }) => {
-    return (
-        <table className="table is-striped is-hoverable">
-            <thead>
-                <tr>
-                    <th>Código</th>
-                    <th>SKU</th>
-                    <th>Nome</th>
-                    <th>Preço</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                {
-                    produtos.map(produto => (
-                        <ProdutoRow
-                            onEdit={onEdit}
-                            onDelete={onDelete}
-                            key={produto.id}
-                            produto={produto}
-                        />
-                    )
-                    )
-                }
-            </tbody>
-        </table>
-    )
-}
 
-interface ProdutoRowProps {
-    produto: Produto
-    onEdit: (produto: any) => void;
-    onDelete: (produto: any) => void;
-}
+    const actionTemplate = (registro: Produto) => {
 
-const ProdutoRow: React.FC<ProdutoRowProps> = ({
-    produto,
-    onEdit,
-    onDelete
-}) => {
+        const url = `/cadastros/produtos?id=${registro.id}`;
 
-    const [deletando, setDeletando] = useState<boolean>(false)
-
-    const onDeleteClick = (produto: Produto) => {
-        if (deletando) {
-            onDelete(produto)
-            setDeletando(false)
-        } else {
-            setDeletando(true)
-        }
+        return (
+            <div>
+                <Button
+                    label="Editar"
+                    className="p-button-rounded p-button-info"
+                    onClick={e => onEdit(registro)}
+                />
+                <Button
+                    label="Deletar"
+                    className="p-button-rounded p-button-danger"
+                    onClick={(e) => {
+                        confirmDialog({
+                            message: 'Confirma a exclusão deste registro?',
+                            acceptLabel: 'Sim',
+                            rejectLabel: 'Não',
+                            accept: () => onDelete(registro),
+                            header: 'Confirmação',
+                        });
+                    }}
+                />
+            </div>
+        )
     }
 
-    const cancelaDelete = () => setDeletando(false)
-
     return (
-        <tr>
-            <td>{produto.id}</td>
-            <td>{produto.sku}</td>
-            <td>{produto.nome}</td>
-            <td>{produto.preco}</td>
-            <td>
-                {!deletando &&
-                    <button
-                        onClick={e => onEdit(produto)}
-                        className="button is-success is-rounded is-small">
-                        Editar
-                    </button>
-                }
-                <button
-                    onClick={e => onDeleteClick(produto)}
-                    className="button is-danger is-rounded is-small">
-                    {deletando ? "Confirma?" : "Deletar"}
-                </button>
-                {deletando &&
-                    <button
-                        onClick={cancelaDelete}
-                        className="button is-rounded is-small">
-                        Cancelar
-                    </button>
-                }
-            </td>
-        </tr>
+
+        <DataTable
+            value={produtos}
+            paginator rows={5}
+            emptyMessage="Carregando produtos..."
+        >
+            <Column header="Código" field="id" />
+            <Column header="SKU" field="sku" />
+            <Column header="Nome" field="nome" />
+            <Column header="Preço" field="preco" />
+            <Column header="" body={actionTemplate} />
+        </DataTable>
     )
 }

@@ -7,6 +7,7 @@ import { Layout } from "@/components/layout"
 import { AxiosResponse } from "axios"
 import Link from "next/link"
 import Router from "next/router"
+import { ConfirmDialog } from "primereact/confirmdialog"
 import { useEffect, useState } from "react"
 import useSWR from "swr"
 import { TabelaProdutos } from "./tabela"
@@ -49,6 +50,7 @@ export const ListagemProdutos: React.FC = () => {
             <br />
             <Loader show={!result} />
             <TabelaProdutos onEdit={editar} onDelete={deletar} produtos={lista} />
+            <ConfirmDialog />
         </Layout>
     )
 } 
