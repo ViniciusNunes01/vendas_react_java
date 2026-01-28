@@ -34,7 +34,12 @@ export const useClienteService = () => {
 
     }
 
-    const find = async (nome: string = '', cpf: string = '', page: number = 0, size: number = 10): Promise<Page<Cliente>> => {
+    const find = async (
+
+        nome: string = '',
+        cpf: string = '',
+        page: number = 0,
+        size: number = 10): Promise<Page<Cliente>> => {
 
         const url = `${resourceURL}?nome=${nome}&cpf=${cpf}&page=${page}&size=${size}`
         const response: AxiosResponse<Page<Cliente>> = await httpClient.get(url)
