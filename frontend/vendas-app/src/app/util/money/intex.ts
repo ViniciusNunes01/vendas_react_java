@@ -1,8 +1,8 @@
 export const converterEmBigDecimal = (value: any): number => {
-    if (!value) {
-        return 0;
-    }
-    return value.replace(".","").replace(",", ".")
+  if (!value) {
+    return 0;
+  }
+  return value.replace(".", "").replace(",", ".")
 }
 
 export const formatReal = (valor: any): string => {
@@ -21,3 +21,12 @@ export const formatReal = (valor: any): string => {
     maximumFractionDigits: 2,
   });
 };
+
+export const formatarMoeda = (valor: number | undefined): string => {
+  return (valor ?? 0).toLocaleString('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+}

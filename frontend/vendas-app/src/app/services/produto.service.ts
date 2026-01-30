@@ -32,10 +32,17 @@ export const useProdutoService = () => {
 
     }
 
+    const listar = async (): Promise<Produto[]> => {
+
+        const response: AxiosResponse<Produto[]> = await httpClient.get(resourceURL)
+        return response.data
+    }
+
     return {
         salvar,
         atualizar,
         carregarProduto,
-        deletarProduto
+        deletarProduto,
+        listar
     }
 }
