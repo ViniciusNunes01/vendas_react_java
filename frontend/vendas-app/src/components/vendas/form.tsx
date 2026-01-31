@@ -13,6 +13,7 @@ import { Dialog } from "primereact/dialog"
 import { Dropdown } from "primereact/dropdown"
 import { InputText } from "primereact/inputtext"
 import { useState } from "react"
+import { validationScheme } from "./validationScheme"
 
 interface VendasFormProps {
     onSubmit: (venda: Venda) => void
@@ -48,7 +49,8 @@ export const VendasForm: React.FC<VendasFormProps> = ({
 
     const formik = useFormik<Venda>({
         onSubmit,
-        initialValues: formScheme
+        initialValues: formScheme,
+        validationSchema: validationScheme
     })
 
     const handleClienteAutoComplete = (e: AutoCompleteCompleteEvent) => {
@@ -97,46 +99,41 @@ export const VendasForm: React.FC<VendasFormProps> = ({
 
     const handleAddProduto = () => {
 
-        // Cria uma cópia do array atual de itens
-        const itensAdicionados = [...(formik.values.itens || [])];
+        const itensAtuais = formik.values.itens || [];
 
-        const indexEncontrado = itensAdicionados.findIndex((itemVenda: ItemVenda) => {
+        let novaLista = [...itensAtuais];
+
+        const indexEncontrado = novaLista.findIndex((itemVenda: ItemVenda) => {
             return itemVenda.produto.id === produto?.id;
         });
 
         if (indexEncontrado !== -1) {
 
-            // Se o item já existe, atualiza a quantidade
-            const itemExistente = itensAdicionados[indexEncontrado];
-            itensAdicionados[indexEncontrado] = {
+            const itemExistente = novaLista[indexEncontrado];
+            novaLista[indexEncontrado] = {
                 ...itemExistente,
                 quantidade: itemExistente.quantidade + quantidadeProduto
             };
         } else {
 
-            // Se o item não existe, adiciona um novo item ao array
             if (produto && quantidadeProduto) {
-                itensAdicionados.push({
+                novaLista.push({
                     produto: produto,
                     quantidade: quantidadeProduto
                 });
             }
         }
 
-        // Atualiza os itens
-        formik.setFieldValue('itens', itensAdicionados);
+        formik.setFieldValue('itens', novaLista);
 
-        // Recalcula o total
-        const novoTotal = totalVenda(itensAdicionados);
+        const novoTotal = totalVenda(novaLista);
         formik.setFieldValue('total', novoTotal);
 
-        // Limpeza
+        formik.setFieldTouched('itens', false);
+
         setProduto(null);
         setCodigoProduto('');
         setQuantidadeProduto(0);
-
-
-
     }
 
     const handleFecharDialogProdutoNaoEncontrado = () => {
@@ -186,7 +183,12 @@ export const VendasForm: React.FC<VendasFormProps> = ({
                         completeMethod={handleClienteAutoComplete}
                         field="nome"
                         onChange={handleClienteChange}
+                        className={formik.touched.cliente && formik.errors.cliente ? 'p-invalid' : ''}
+                        onBlur={() => formik.setFieldTouched('cliente', true)}
                     />
+                    {formik.touched.cliente && formik.errors.cliente && (
+                        <small className="p-error" style={{ display: 'block' }}>{formik.errors.cliente as string}</small>
+                    )}
                 </div>
 
 
@@ -245,7 +247,38 @@ export const VendasForm: React.FC<VendasFormProps> = ({
                     </div>
 
                     <div className="col-12">
-                        <DataTable value={formik.values.itens} emptyMessage="Nenhum produto adicionado.">
+                        <DataTable value={formik.values.itens ?? []} key={(formik.values.itens ?? []).length} emptyMessage="Nenhum produto adicionado." dataKey="produto.id">
+                            <Column
+                                body={(item: ItemVenda, options) => {
+
+                                    const handleRemoverItem = () => {
+
+                                        console.log("ANTES:", formik.values.itens);
+                                        console.log("ROW INDEX:", options.rowIndex);
+                                        console.log("ITEM CLICADO:", item);
+
+                                        const novaLista = [...(formik.values.itens || [])];
+                                        novaLista.splice(options.rowIndex, 1);
+
+                                        console.log("DEPOIS:", novaLista);
+
+                                        formik.setFieldValue("itens", novaLista);
+
+                                        const novoTotal = totalVenda(novaLista);
+                                        formik.setFieldValue("total", novoTotal);
+                                    }
+
+                                    return (
+                                        <Button
+                                            type="button"
+                                            label="Excluir"
+                                            onClick={handleRemoverItem}
+                                        />
+                                    )
+                                }}
+                            />
+
+
                             <Column field="produto.id" header="Código" />
                             <Column field="produto.sku" header="SKU" />
                             <Column field="produto.nome" header="Produto" />
@@ -259,6 +292,11 @@ export const VendasForm: React.FC<VendasFormProps> = ({
                                 body={(itemVenda: ItemVenda) => formatarMoeda((itemVenda.produto.preco ?? 0) * itemVenda.quantidade)}
                             />
                         </DataTable>
+                        {formik.touched.itens && formik.errors.itens && (
+                            <small className="p-error" style={{ marginTop: '5px', display: 'block' }}>
+                                {formik.errors.itens as string}
+                            </small>
+                        )}
                     </div>
 
                     <div className="col-4">
@@ -269,10 +307,14 @@ export const VendasForm: React.FC<VendasFormProps> = ({
                                 name="formaPagamento"
                                 value={formik.values.formaPagamento}
                                 options={formasPagamento}
-                                optionLabel="descricao"
                                 placeholder="Selecione..."
-                                onChange={(e) => (formik.setFieldValue("formaPagamento", e.value))}
+                                onChange={(e) => formik.setFieldValue("formaPagamento", e.value)}
+                                // p-invalid deixa a borda vermelha do PrimeReact
+                                className={formik.touched.formaPagamento && formik.errors.formaPagamento ? 'p-invalid' : ''}
                             />
+                            {formik.touched.formaPagamento && formik.errors.formaPagamento && (
+                                <small className="p-error">{formik.errors.formaPagamento}</small>
+                            )}
                         </div>
                     </div>
 
