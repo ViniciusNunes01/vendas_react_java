@@ -16,7 +16,9 @@ import { useState } from "react"
 import { validationScheme } from "./validationScheme"
 
 interface VendasFormProps {
-    onSubmit: (venda: Venda) => void
+    onSubmit: (venda: Venda) => void,
+    onNovaVenda: () => void;
+    vendaRealizada: boolean;
 }
 
 const formScheme: Venda = {
@@ -27,7 +29,9 @@ const formScheme: Venda = {
 }
 
 export const VendasForm: React.FC<VendasFormProps> = ({
-    onSubmit
+    onSubmit,
+    onNovaVenda,
+    vendaRealizada
 }) => {
 
     const formasPagamento: String[] = ["DINHEIRO", "CARTÃO"]
@@ -166,6 +170,11 @@ export const VendasForm: React.FC<VendasFormProps> = ({
         }, 0);
 
         return Number(total.toFixed(2));
+    }
+
+    const realizarNovaVenda = () => {
+        onNovaVenda();
+        formik.resetForm();
     }
 
     return (
@@ -339,11 +348,22 @@ export const VendasForm: React.FC<VendasFormProps> = ({
                     </div>
 
                 </div>
-                <Button
-                    type="submit"
-                    label="Finalizar"
-                    className="mt-2"
-                />
+                {!vendaRealizada &&
+                    <Button
+                        type="submit"
+                        label="Finalizar"
+                        className="mt-2"
+                    />
+                }
+                {
+                    vendaRealizada &&
+                    <Button
+                        type="button"
+                        label="Nova Venda"
+                        className="p-button-success"
+                        onClick={realizarNovaVenda}
+                    />
+                }
             </div>
             <Dialog
                 header="Atenção!"
