@@ -28,6 +28,7 @@ public class Venda {
 	private Cliente cliente;
 
 	@Enumerated(EnumType.STRING)
+	@Column(name = "forma_pagamento")
 	private FormaPagamento formaPagamento;
 
 	@OneToMany(mappedBy = "venda")
