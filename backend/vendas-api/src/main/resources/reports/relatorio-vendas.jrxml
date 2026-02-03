@@ -1,21 +1,26 @@
 <!-- Created with Jaspersoft Studio version 7.0.3.final using JasperReports Library version 7.0.3-41034ca841d452f3305ba55b9042260aaa1ab5dd  -->
-<jasperReport name="relatorio-vendas" language="java" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9a54af13-8ce3-48b9-8c3c-5bef35180776">
+<jasperReport name="relatorio-vendas" language="java" pageWidth="595" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9a54af13-8ce3-48b9-8c3c-5bef35180776">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="banco-de-dados-vendas.jrdax"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.report.locale" value="pt_BR"/>
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="295"/>
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="696"/>
 	<property name="net.sf.jasperreports.data.adapter" value="C:\Users\Vinicius\Desktop\Programming\FullStack_Java_Typescript\backend\vendas-api\src\main\resources\reports\banco-de-dados-vendas.jrdax"/>
-	<parameter name="DATA_INICIO" class="java.util.Date"/>
-	<parameter name="DATA_FIM" class="java.util.Date"/>
+	<parameter name="DATA_INICIO" class="java.sql.Timestamp"/>
+	<parameter name="DATA_FIM" class="java.sql.Timestamp"/>
 	<parameter name="ID_CLIENTE" class="java.lang.Long"/>
-	<query language="sql"><![CDATA[select 
-	v.id as codigo,
-	c.nome as nomecliente,
-	v.total as total,
-	v.forma_pagamento
-from tb_venda as v
-join tb_cliente as c on c.id = v.id_cliente]]></query>
+	<query language="sql"><![CDATA[SELECT 
+    v.id as codigo, 
+    c.nome as nomecliente, 
+    v.data_venda, 
+    v.forma_pagamento, 
+    v.total 
+FROM tb_venda v 
+JOIN tb_cliente c ON v.id_cliente = c.id
+WHERE (v.id_cliente = $P{ID_CLIENTE} OR $P{ID_CLIENTE} IS NULL)
+  AND v.data_venda >= $P{DATA_INICIO}
+  AND v.data_venda <= $P{DATA_FIM}
+ORDER BY c.nome ASC, v.data_venda DESC]]></query>
 	<field name="codigo" class="java.lang.Long">
 		<property name="com.jaspersoft.studio.field.name" value="codigo"/>
 		<property name="com.jaspersoft.studio.field.label" value="codigo"/>
@@ -26,14 +31,19 @@ join tb_cliente as c on c.id = v.id_cliente]]></query>
 		<property name="com.jaspersoft.studio.field.label" value="nomecliente"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="tb_cliente"/>
 	</field>
-	<field name="total" class="java.math.BigDecimal">
-		<property name="com.jaspersoft.studio.field.name" value="total"/>
-		<property name="com.jaspersoft.studio.field.label" value="total"/>
+	<field name="data_venda" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="data_venda"/>
+		<property name="com.jaspersoft.studio.field.label" value="data_venda"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="tb_venda"/>
 	</field>
 	<field name="forma_pagamento" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="forma_pagamento"/>
 		<property name="com.jaspersoft.studio.field.label" value="forma_pagamento"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="tb_venda"/>
+	</field>
+	<field name="total" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="total"/>
+		<property name="com.jaspersoft.studio.field.label" value="total"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="tb_venda"/>
 	</field>
 	<variable name="total1" resetType="Column" calculation="Sum" class="java.math.BigDecimal">
@@ -61,21 +71,25 @@ join tb_cliente as c on c.id = v.id_cliente]]></query>
 		</element>
 	</title>
 	<columnHeader height="20" splitType="Stretch">
-		<element kind="staticText" uuid="fd7d9ba8-5f34-44c2-9d4a-dabaa5b962ed" mode="Opaque" x="0" y="0" width="100" height="20" forecolor="#FFFFFF" backcolor="#9E9E9E" bold="true" hTextAlign="Center" vTextAlign="Middle">
+		<element kind="staticText" uuid="fd7d9ba8-5f34-44c2-9d4a-dabaa5b962ed" mode="Opaque" x="0" y="0" width="100" height="20" forecolor="#FFFFFF" backcolor="#9E9E9E" markup="none" bold="true" hTextAlign="Center" vTextAlign="Middle">
 			<text><![CDATA[Código]]></text>
 			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="7445cf34-7852-43f9-b735-494e4d8fea27"/>
 		</element>
-		<element kind="staticText" uuid="c6a99ed9-f00b-427f-80ee-42a6bb26f68e" mode="Opaque" x="100" y="0" width="260" height="20" forecolor="#FFFFFF" backcolor="#9E9E9E" bold="true" hTextAlign="Center" vTextAlign="Middle">
+		<element kind="staticText" uuid="c6a99ed9-f00b-427f-80ee-42a6bb26f68e" mode="Opaque" x="100" y="0" width="200" height="20" forecolor="#FFFFFF" backcolor="#9E9E9E" markup="none" bold="true" hTextAlign="Center" vTextAlign="Middle">
 			<text><![CDATA[Cliente]]></text>
 			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="1a5e98aa-4802-440d-83d6-8deb97f00190"/>
 		</element>
-		<element kind="staticText" uuid="25e6a2b6-8ae3-44e3-8ccf-bd9be1d2cf7f" mode="Opaque" x="360" y="0" width="100" height="20" forecolor="#FFFFFF" backcolor="#9E9E9E" bold="true" hTextAlign="Center" vTextAlign="Middle">
+		<element kind="staticText" uuid="25e6a2b6-8ae3-44e3-8ccf-bd9be1d2cf7f" mode="Opaque" x="360" y="0" width="100" height="20" forecolor="#FFFFFF" backcolor="#9E9E9E" markup="none" bold="true" hTextAlign="Center" vTextAlign="Middle">
 			<text><![CDATA[Forma Pag.]]></text>
 			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a86afb88-f15d-4b2a-86b1-2601a64933d3"/>
 		</element>
-		<element kind="staticText" uuid="64c5d850-7de5-4b9e-bfe8-d1cd7afebac8" mode="Opaque" x="460" y="0" width="90" height="20" forecolor="#FFFFFF" backcolor="#9E9E9E" bold="true" hTextAlign="Center" vTextAlign="Middle">
+		<element kind="staticText" uuid="64c5d850-7de5-4b9e-bfe8-d1cd7afebac8" mode="Opaque" x="460" y="0" width="90" height="20" forecolor="#FFFFFF" backcolor="#9E9E9E" markup="none" bold="true" hTextAlign="Center" vTextAlign="Middle">
 			<text><![CDATA[Total]]></text>
 			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="3a5eccb1-37b1-4cdf-a46f-5a72baab6af5"/>
+		</element>
+		<element kind="staticText" uuid="4b7cb8c2-c11b-47ec-afe9-0caf1e5191e2" mode="Opaque" x="300" y="0" width="60" height="20" forecolor="#FFFFFF" backcolor="#9E9E9E" markup="none" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[Data]]></text>
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="efdd3b0a-e16b-4c02-aec0-7e0a212af309"/>
 		</element>
 	</columnHeader>
 	<detail>
@@ -83,23 +97,27 @@ join tb_cliente as c on c.id = v.id_cliente]]></query>
 			<element kind="rectangle" uuid="33337781-f94a-47d7-9a40-46ab1f7f881d" mode="Opaque" x="0" y="0" width="550" height="30" backcolor="#E1E1E1">
 				<printWhenExpression><![CDATA[new java.lang.Boolean($V{REPORT_COUNT} % 2 == 0)]]></printWhenExpression>
 			</element>
-			<element kind="textField" uuid="b724a642-136f-42d8-b1ee-38dde64c0a25" x="0" y="0" width="100" height="30" hTextAlign="Center" vTextAlign="Middle">
+			<element kind="textField" uuid="b724a642-136f-42d8-b1ee-38dde64c0a25" x="0" y="0" width="100" height="30" markup="none" hTextAlign="Center" vTextAlign="Middle">
 				<expression><![CDATA[$F{codigo}]]></expression>
 				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="7445cf34-7852-43f9-b735-494e4d8fea27"/>
 			</element>
-			<element kind="textField" uuid="e2f1979d-a896-4c8f-89c6-c84a20dd4138" x="100" y="0" width="260" height="30" vTextAlign="Middle">
+			<element kind="textField" uuid="e2f1979d-a896-4c8f-89c6-c84a20dd4138" x="100" y="0" width="200" height="30" markup="none" vTextAlign="Middle">
 				<expression><![CDATA[$F{nomecliente}]]></expression>
 				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="1a5e98aa-4802-440d-83d6-8deb97f00190"/>
 			</element>
-			<element kind="textField" uuid="4525f68e-1aa3-4cef-bbd2-66523272b4c5" x="360" y="0" width="100" height="30" hTextAlign="Center" vTextAlign="Middle">
+			<element kind="textField" uuid="4525f68e-1aa3-4cef-bbd2-66523272b4c5" x="360" y="0" width="100" height="30" markup="none" hTextAlign="Center" vTextAlign="Middle">
 				<expression><![CDATA[$F{forma_pagamento}]]></expression>
 				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a86afb88-f15d-4b2a-86b1-2601a64933d3"/>
 			</element>
-			<element kind="textField" uuid="02cf8d8e-80f8-4699-94e4-b7b329823905" x="460" y="0" width="90" height="30" pattern="R$ #,#00.00" hTextAlign="Right" vTextAlign="Middle">
+			<element kind="textField" uuid="02cf8d8e-80f8-4699-94e4-b7b329823905" x="460" y="0" width="90" height="30" markup="none" pattern="R$ #,#00.00" hTextAlign="Right" vTextAlign="Middle">
 				<paragraph rightIndent="2"/>
 				<expression><![CDATA[$F{total}]]></expression>
 				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="3a5eccb1-37b1-4cdf-a46f-5a72baab6af5"/>
 				<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+			</element>
+			<element kind="textField" uuid="02f669c8-7b9e-4f5a-a5cf-ef032a1476ab" x="300" y="0" width="60" height="30" markup="none" pattern="dd/MM/yyyy" hTextAlign="Center" vTextAlign="Middle">
+				<expression><![CDATA[$F{data_venda}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="efdd3b0a-e16b-4c02-aec0-7e0a212af309"/>
 			</element>
 		</band>
 	</detail>
@@ -130,5 +148,9 @@ join tb_cliente as c on c.id = v.id_cliente]]></query>
 			<expression><![CDATA[" de " + $V{PAGE_NUMBER}]]></expression>
 		</element>
 	</pageFooter>
-	<noData height="50"/>
+	<noData height="53">
+		<element kind="staticText" uuid="21747f18-d6a4-41fd-b315-ac13f8e1fb4b" x="0" y="11" width="554" height="30" fontSize="14.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[NENHUM REGISTRO ENCONTRADO PARA OS PARÂMETROS PASSADOS.]]></text>
+		</element>
+	</noData>
 </jasperReport>

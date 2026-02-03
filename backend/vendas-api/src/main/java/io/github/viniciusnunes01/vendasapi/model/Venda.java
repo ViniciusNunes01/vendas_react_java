@@ -39,8 +39,8 @@ public class Venda {
 	@Column
 	private BigDecimal total;
 	
-	@Column(name = "data_cadastro")
-	private LocalDateTime dataCadastro;
+	@Column(name = "data_venda")
+	private LocalDateTime dataVenda;
 	
 	@PrePersist
 	public void prePersist() {
@@ -88,11 +88,11 @@ public class Venda {
 	}
 
 	public LocalDateTime getDataCadastro() {
-		return dataCadastro;
+		return dataVenda;
 	}
 
-	public void setDataCadastro(LocalDateTime dataCadastro) {
-		this.dataCadastro = dataCadastro;
+	public void setDataCadastro(LocalDateTime dataVenda) {
+		this.dataVenda = dataVenda;
 	}
 
 	@Override
