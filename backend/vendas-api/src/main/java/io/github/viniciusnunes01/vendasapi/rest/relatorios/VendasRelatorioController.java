@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.github.viniciusnunes01.vendasapi.service.relatorios.RelatorioVendasService;
@@ -20,9 +21,15 @@ public class VendasRelatorioController {
 	private RelatorioVendasService relatorioVendasService;
 
 	@GetMapping("/relatorio-vendas")
-	public ResponseEntity<byte[]> relatorioVendas() {
+	public ResponseEntity<byte[]> relatorioVendas(
 
-		byte[] relatorioGerado = relatorioVendasService.gerarRelatorio();
+			@RequestParam(value = "id", required = false, defaultValue = "0") Long id,
+			@RequestParam(value = "inicio", required = false, defaultValue = "") String inicio,
+			@RequestParam(value = "fim", required = false, defaultValue = "") String fim
+
+	) {
+
+		byte[] relatorioGerado = relatorioVendasService.gerarRelatorio(id, inicio, fim);
 
 		HttpHeaders headers = new HttpHeaders();
 		var fileName = "relatorio-vendas.pdf";
@@ -32,7 +39,7 @@ public class VendasRelatorioController {
 
 		headers.setCacheControl("must-revalidade, post-check=0, pre-check=0");
 
-		var responseEntity = new	 ResponseEntity<>(relatorioGerado, headers, HttpStatus.OK);
+		var responseEntity = new ResponseEntity<>(relatorioGerado, headers, HttpStatus.OK);
 
 		return responseEntity;
 	}

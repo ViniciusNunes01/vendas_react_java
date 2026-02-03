@@ -1,6 +1,7 @@
 package io.github.viniciusnunes01.vendasapi.model;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import jakarta.persistence.Column;
@@ -13,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
 @Entity
@@ -36,6 +38,14 @@ public class Venda {
 
 	@Column
 	private BigDecimal total;
+	
+	@Column(name = "data_cadastro")
+	private LocalDateTime dataCadastro;
+	
+	@PrePersist
+	public void prePersist() {
+		setDataCadastro(LocalDateTime.now());
+	}
 
 	public Long getId() {
 		return id;
@@ -75,6 +85,14 @@ public class Venda {
 
 	public void setTotal(BigDecimal total) {
 		this.total = total;
+	}
+
+	public LocalDateTime getDataCadastro() {
+		return dataCadastro;
+	}
+
+	public void setDataCadastro(LocalDateTime dataCadastro) {
+		this.dataCadastro = dataCadastro;
 	}
 
 	@Override

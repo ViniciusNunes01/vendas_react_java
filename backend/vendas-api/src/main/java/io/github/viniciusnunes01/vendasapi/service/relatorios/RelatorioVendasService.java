@@ -20,7 +20,7 @@ public class RelatorioVendasService {
     @Autowired
     private DataSource dataSource;
 
-    public byte[] gerarRelatorio() {
+    public byte[] gerarRelatorio(Long idCliente, String dataInicio, String dataFim) {
         try (Connection connection = dataSource.getConnection()) {
             return JasperExportUtil.exportarParaPdf(relatorioVendasSource.getInputStream(), connection);
         } catch (Exception e) {

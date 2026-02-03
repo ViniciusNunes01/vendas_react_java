@@ -41,7 +41,7 @@ export const Input: React.FC<InputProps> = ({
     }
 
     return (
-        <div className={`field column ${columnClasses}`}>
+        <div className={`field ${columnClasses}`}>
             <label className="label" htmlFor={id}>{label}</label>
             <div className="control">
                 <input
@@ -107,7 +107,7 @@ export const InputDate: React.FC<InputProps> = (props: InputProps) => {
 };
 
 export const InputPhone: React.FC<InputProps> = (props: InputProps) => {
-    
+
     const { id } = props;
 
     useEffect(() => {

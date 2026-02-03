@@ -6,6 +6,9 @@
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="295"/>
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="696"/>
 	<property name="net.sf.jasperreports.data.adapter" value="C:\Users\Vinicius\Desktop\Programming\FullStack_Java_Typescript\backend\vendas-api\src\main\resources\reports\banco-de-dados-vendas.jrdax"/>
+	<parameter name="DATA_INICIO" class="java.util.Date"/>
+	<parameter name="DATA_FIM" class="java.util.Date"/>
+	<parameter name="ID_CLIENTE" class="java.lang.Long"/>
 	<query language="sql"><![CDATA[select 
 	v.id as codigo,
 	c.nome as nomecliente,

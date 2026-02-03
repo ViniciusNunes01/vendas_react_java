@@ -1,6 +1,7 @@
 import { Cliente } from "@/app/models/clientes"
 import { Page } from "@/app/models/common/page"
-import { useClienteService } from "@/app/services"
+import { useClienteService, useRelatoriosService } from "@/app/services"
+import { InputDate } from "@/components/common"
 import { Layout } from "@/components/layout"
 import { useFormik } from "formik"
 import { AutoComplete, AutoCompleteChangeEvent, AutoCompleteCompleteEvent } from "primereact/autocomplete"
@@ -16,6 +17,8 @@ interface RelatorioVendasForm {
 export const RelatorioVendas: React.FC = () => {
 
     const clienteService = useClienteService();
+    const relatorioService = useRelatoriosService();
+
     const [listaClientes, setListaClientes] = useState<Page<Cliente>>({
         content: [],
         totalElements: 0,
@@ -25,16 +28,31 @@ export const RelatorioVendas: React.FC = () => {
     });
 
     const handleSubmit = (formData: RelatorioVendasForm) => {
-        console.log(formData)
+        relatorioService.gerarRelatorioVendas(
+            formData.cliente?.id,
+            formData.dataInicio,
+            formData.dataFim
+        ).then(blob => {
+
+            const fileURL = URL.createObjectURL(blob);
+            window.open(fileURL)
+        }
+
+        )
     }
 
     const formik = useFormik<RelatorioVendasForm>({
         onSubmit: handleSubmit,
-        initialValues: { cliente: null, dataFim: '', dataInicio: '' }
+        initialValues: {
+            cliente: null,
+            dataInicio: '',
+            dataFim: ''
+        }
     })
 
     const handleClienteAutoComplete = (e: AutoCompleteCompleteEvent) => {
         const nome = e.query
+
         clienteService
             .find(nome, '', 0, 10)
             .then(clientes => setListaClientes(clientes))
@@ -43,36 +61,58 @@ export const RelatorioVendas: React.FC = () => {
     return (
         <Layout titulo="Relatório de Vendas">
             <form onSubmit={formik.handleSubmit}>
-                <div className="p-grid">
-                    <div className="col-12">
-                        <AutoComplete
-                            suggestions={listaClientes.content}
-                            completeMethod={handleClienteAutoComplete}
-                            value={formik.values.cliente}
-                            field="nome"
-                            id="cliente"
-                            name="cliente"
-                            onChange={(e: AutoCompleteChangeEvent) => {
-                                formik.setFieldValue("cliente", e.value)
+                {/* p-fluid garante que os componentes ocupem 100% da largura da coluna */}
+                <div className="p-fluid">
+                    <div className="grid">
 
-                            }}
-                        />
-                    </div>
-                    <div className="co-6">
+                        {/* Cliente: Ocupa as 12 colunas */}
+                        <div className="col-12 field">
+                            <label htmlFor="cliente" className="font-bold">Cliente</label>
+                            <AutoComplete
+                                suggestions={listaClientes.content}
+                                completeMethod={handleClienteAutoComplete}
+                                value={formik.values.cliente}
+                                field="nome"
+                                id="cliente"
+                                name="cliente"
+                                onChange={(e: AutoCompleteChangeEvent) => {
+                                    formik.setFieldValue("cliente", e.value)
+                                }}
+                            />
+                        </div>
 
-                    </div>
-                    <div className="col-6">
+                        {/* Datas: Cada uma ocupa 6 colunas */}
+                        <div className="col-6 field">
+                            <InputDate
+                                id="dataInicio"
+                                name="dataInicio"
+                                label="Data Início"
+                                value={formik.values.dataInicio}
+                                onChange={formik.handleChange}
+                            />
+                        </div>
+                        <div className="col-6 field">
+                            <InputDate
+                                id="dataFim"
+                                name="dataFim"
+                                label="Data Fim"
+                                value={formik.values.dataFim}
+                                onChange={formik.handleChange}
+                            />
+                        </div>
 
-                    </div>
-                    <div className="col-6">
-                        <Button
-                            label="Gerar Relatório"
-                            type="submit"
-                        />
+                        {/* Botão: Volta a ocupar as 12 colunas para alinhar com o topo */}
+                        <div className="col-12">
+                            <Button
+                                label="Gerar Relatório"
+                                type="submit"
+                                icon="pi pi-file-pdf"
+                                className="p-button-primary"
+                            />
+                        </div>
                     </div>
                 </div>
             </form>
         </Layout>
     )
-
 }
