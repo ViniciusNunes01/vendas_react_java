@@ -61,11 +61,10 @@ export const RelatorioVendas: React.FC = () => {
     return (
         <Layout titulo="Relatório de Vendas">
             <form onSubmit={formik.handleSubmit}>
-                {/* p-fluid garante que os componentes ocupem 100% da largura da coluna */}
+              
                 <div className="p-fluid">
                     <div className="grid">
 
-                        {/* Cliente: Ocupa as 12 colunas */}
                         <div className="col-12 field">
                             <label htmlFor="cliente" className="font-bold">Cliente</label>
                             <AutoComplete
@@ -81,7 +80,6 @@ export const RelatorioVendas: React.FC = () => {
                             />
                         </div>
 
-                        {/* Datas: Cada uma ocupa 6 colunas */}
                         <div className="col-6 field">
                             <InputDate
                                 id="dataInicio"
@@ -101,7 +99,6 @@ export const RelatorioVendas: React.FC = () => {
                             />
                         </div>
 
-                        {/* Botão: Volta a ocupar as 12 colunas para alinhar com o topo */}
                         <div className="col-12">
                             <Button
                                 label="Gerar Relatório"
