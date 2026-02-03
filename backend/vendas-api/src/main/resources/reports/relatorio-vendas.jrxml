@@ -5,6 +5,7 @@
 	<property name="com.jaspersoft.studio.report.locale" value="pt_BR"/>
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="295"/>
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="696"/>
+	<property name="net.sf.jasperreports.data.adapter" value="C:\Users\Vinicius\Desktop\Programming\FullStack_Java_Typescript\backend\vendas-api\src\main\resources\reports\banco-de-dados-vendas.jrdax"/>
 	<query language="sql"><![CDATA[select 
 	v.id as codigo,
 	c.nome as nomecliente,
