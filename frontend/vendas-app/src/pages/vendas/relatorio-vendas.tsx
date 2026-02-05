@@ -1,3 +1,9 @@
-import { RelatorioVendas } from "@/components";
+import { RelatorioVendas, RotaAutenticada } from "@/components";
 
-export default RelatorioVendas;
+export default function () {
+    return (
+        <RotaAutenticada>
+            <RelatorioVendas />
+        </RotaAutenticada>
+    )
+}

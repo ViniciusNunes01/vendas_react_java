@@ -1,4 +1,9 @@
-import { CadastroProdutos } from "@/components";
+import { CadastroProdutos, RotaAutenticada } from "@/components";
 
-
-export default CadastroProdutos
+export default function () {
+    return (
+        <RotaAutenticada>
+            <CadastroProdutos />
+        </RotaAutenticada>
+    )
+}

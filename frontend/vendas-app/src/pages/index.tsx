@@ -1,6 +1,6 @@
 import { DashboardData } from '@/app/models/dashboard';
 import { useDashboardService } from '@/app/services';
-import { Dashboard, Layout } from '@/components';
+import { Dashboard, Layout, RotaAutenticada } from '@/components';
 import Head from 'next/head';
 import React from 'react';
 
@@ -10,7 +10,7 @@ interface HomeProps {
 
 const Home: React.FC<HomeProps> = (props: HomeProps) => {
   return (
-    <div>
+    <RotaAutenticada>
       <Head>
         <title>Vendas App</title>
         <link rel="icon" href="/favicon.ico" />
@@ -28,7 +28,7 @@ const Home: React.FC<HomeProps> = (props: HomeProps) => {
           <p>Carregando dados...</p>
         )}
       </Layout>
-    </div>
+    </RotaAutenticada>
   )
 }
 

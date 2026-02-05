@@ -15,6 +15,7 @@
     "formik": "^2.4.6",
     "imask": "^7.6.1",
     "next": "15.5.3",
+    "next-auth": "^4.24.13",
     "primeflex": "^4.0.0",
     "primereact": "^10.9.7",
     "react": "19.1.0",
@@ -25,6 +26,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/next-auth": "^3.15.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
