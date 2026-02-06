@@ -100,90 +100,92 @@ export const CadastroProdutos: React.FC = () => {
         })
     }
 
-
-
     return (
         <Layout titulo="Produtos" mensagens={messages}>
-            {id &&
+            <div className="container is-fluid">
+
+                {id &&
+                    <div className="columns is-multiline">
+                        <Input
+                            id="inputId"
+                            label="Código: *"
+                            columnClasses="column is-6"
+                            value={id}
+                            disabled={true}
+                        />
+                        <Input
+                            id="inputDataCadastro"
+                            label="Data de Cadastro: *"
+                            columnClasses="column is-6"
+                            value={cadastro}
+                            disabled={true}
+                        />
+                    </div>
+                }
+
+                <div className="columns is-multiline">
+                    <Input
+                        id="inputSku"
+                        label="SKU: *"
+                        placeholder="Digite o SKU do produto"
+                        columnClasses="column is-6"
+                        value={sku}
+                        onChange={e => setSku(e.target.value)}
+                        error={errors.sku}
+                    />
+                    <InputMoney
+                        id="inputPreco"
+                        label="Preço: *"
+                        placeholder="Digite o PREÇO do produto"
+                        columnClasses="column is-6" 
+                        value={preco}
+                        onChange={e => setPreco(e.target.value)}
+                        error={errors.preco}
+                    />
+                </div>
+
                 <div className="columns">
                     <Input
-                        id="inputId"
-                        label="Código: *"
-                        columnClasses="is-half"
-                        value={id}
-                        disabled={true}
-                    />
-                    <Input
-                        id="inputDataCadastro"
-                        label="Data de Cadastro: *"
-                        columnClasses="is-half"
-                        value={cadastro}
-                        disabled={true}
+                        id="inputNome"
+                        label="Nome: *"
+                        placeholder="Digite o NOME do produto"
+                        columnClasses="column is-12"
+                        value={nome}
+                        onChange={e => setNome(e.target.value)}
+                        error={errors.nome}
                     />
                 </div>
-            }
 
-            <div className="columns">
-                <Input
-                    id="inputSku"
-                    label="SKU: *"
-                    placeholder="Digite o SKU do produto"
-                    columnClasses="is-half"
-                    value={sku}
-                    onChange={e => setSku(e.target.value)}
-                    error={errors.sku}
-                />
-                <InputMoney
-                    id="inputPreco"
-                    label="Preço: *"
-                    placeholder="Digite o PREÇO do produto"
-                    columnClasses="is-half"
-                    value={preco}
-                    onChange={e => setPreco(e.target.value)}
-                    error={errors.preco}
-                />
-            </div>
-            <div className="columns">
-                <Input
-                    id="inputNome"
-                    label="Nome: *"
-                    placeholder="Digite o NOME do produto"
-                    columnClasses="is-full"
-                    value={nome}
-                    onChange={e => setNome(e.target.value)}
-                    error={errors.nome}
-                />
-            </div>
-
-            <div className="columns">
-                <div className="field column is-full">
-                    <label className="label" htmlFor="inputDescricao">Descrição: *</label>
-                    <div className="control">
-                        <textarea
-                            id="inputDescricao"
-                            className="textarea"
-                            value={descricao}
-                            onChange={e => setDescricao(e.target.value)}
-                            placeholder="Digite a descrição do produto"
-                        />
-                        {
-                            errors.descricao &&
-                            <p className="help is-danger">{errors.descricao}</p>
-                        }
+                <div className="columns">
+                    <div className="column is-12">
+                        <div className="field">
+                            <label className="label" htmlFor="inputDescricao">Descrição: *</label>
+                            <div className="control">
+                                <textarea
+                                    id="inputDescricao"
+                                    className="textarea"
+                                    rows={5}
+                                    value={descricao}
+                                    onChange={e => setDescricao(e.target.value)}
+                                    placeholder="Digite a descrição detalhada do produto"
+                                />
+                                {errors.descricao && <p className="help is-danger">{errors.descricao}</p>}
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div className="field is-grouped">
-                <div className="control">
-                    <button onClick={submit} className="button is-success">
-                        {id ? "Atualizar" : "Salvar"}
-                    </button>
-                </div>
-                <div className="control">
-                    <Link href="/consultas/produtos">
-                        <button className="button is-link is-light">Voltar</button>
-                    </Link>
+                <div className="field is-grouped mt-5">
+                    <div className="control">
+                        <button onClick={submit} className="button is-success is-fullwidth-mobile">
+                            {id ? "Atualizar" : "Salvar"}
+                        </button>
+                    </div>
+                    <div className="control">
+                        <Link href="/consultas/produtos">
+                            <button className="button is-link is-light is-fullwidth-mobile">Voltar</button>
+                        </Link>
+                    </div>
                 </div>
             </div>
         </Layout>

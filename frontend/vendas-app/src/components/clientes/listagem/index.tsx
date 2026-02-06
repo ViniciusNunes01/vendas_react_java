@@ -100,14 +100,14 @@ export const ListagemClientes: React.FC = () => {
                         id="nome"
                         label="Nome"
                         name="nome"
-                        columnClasses="is-half"
+                        columnClasses="column is-6"
                         value={filtro.nome}
                         onChange={handleChange} />
                     <InputCPF
                         id="cpf"
                         label="CPF"
                         name="cpf"
-                        columnClasses="is-half"
+                        columnClasses="column is-6"
                         value={filtro.cpf}
                         onChange={handleChange} />
                 </div>
