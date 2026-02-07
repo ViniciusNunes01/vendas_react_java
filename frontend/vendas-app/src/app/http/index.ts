@@ -2,5 +2,5 @@ import Axios, {AxiosInstance} from 'axios'
 
 export const httpClient: AxiosInstance = Axios.create({
     
-    baseURL: "http://localhost:8080/"
+    baseURL: "https://vendas-react-java.onrender.com/"
 })
