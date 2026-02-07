@@ -1,5 +1,13 @@
 # 🛒 Sistema de Vendas Full Stack - Portfólio
 
+[![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)](https://www.oracle.com/java/)
+[![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=spring-boot&logoColor=white)](https://spring.io/projects/spring-boot)
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
+[![PostgreSQL (SQL)](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+
+# 🛒 Sistema de Vendas Full Stack - Portfólio
+
 Este repositório contém um ecossistema completo de gestão de vendas, integrando uma API robusta em **Java/Spring Boot** com um frontend moderno e responsivo em **React/Next.js**. O projeto foi arquitetado para demonstrar competências em desenvolvimento full stack, segurança (OAuth2) e infraestrutura em nuvem.
 
 ## 🔗 Links do Projeto
