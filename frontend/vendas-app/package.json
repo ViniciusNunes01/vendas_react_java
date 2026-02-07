@@ -14,7 +14,7 @@
     "chart.js": "^4.5.1",
     "formik": "^2.4.6",
     "imask": "^7.6.1",
-    "next": "15.5.3",
+    "next": "latest",
     "next-auth": "^4.24.13",
     "primeflex": "^4.0.0",
     "primereact": "^10.9.7",
