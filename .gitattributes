@@ -1,0 +1,5 @@
+backend/**/*.java linguist-detectable=true
+backend/**/*.java linguist-documentation=false
+
+frontend/public/** linguist-vendored
+frontend/.next/** linguist-vendored
