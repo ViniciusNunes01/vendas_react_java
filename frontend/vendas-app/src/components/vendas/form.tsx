@@ -1,5 +1,5 @@
 import { Cliente } from "@/app/models/clientes"
-import { Page } from "@/app/models/common/page"
+import { Page } from "@/app/models/common"
 import { Produto } from "@/app/models/produtos"
 import { ItemVenda, Venda } from "@/app/models/vendas"
 import { useClienteService, useProdutoService } from "@/app/services"

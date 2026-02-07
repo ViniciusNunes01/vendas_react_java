@@ -1,7 +1,7 @@
 import { AxiosResponse } from "axios"
 import { Cliente } from "../models/clientes"
 import { httpClient } from "../http"
-import { Page } from "../models/common/page"
+import { Page } from "../models/common"
 
 
 const resourceURL: string = "/api/clientes"

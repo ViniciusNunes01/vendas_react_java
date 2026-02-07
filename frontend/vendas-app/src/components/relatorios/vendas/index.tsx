@@ -1,5 +1,5 @@
 import { Cliente } from "@/app/models/clientes"
-import { Page } from "@/app/models/common/page"
+import { Page } from "@/app/models/common"
 import { useClienteService, useRelatoriosService } from "@/app/services"
 import { InputDate } from "@/components/common"
 import { Layout } from "@/components/layout"
